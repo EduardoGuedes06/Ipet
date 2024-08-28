@@ -1,0 +1,161 @@
+﻿@using System.Security.Claims;
+@model Ipet.ViewModels.ServicoViewModel
+
+@{
+    ViewData["Title"] = "Excluir " + Model.Nome;
+}
+
+@{
+    ViewData["Title"] = "" + Model.Nome;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Model.Nome - IPet</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="~/css/vendor.css">
+    <link rel="stylesheet" href="~/css/dog.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        .image-container {
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        }
+
+            .image-container img {
+                width: 300px;
+                height: 300px;
+                border-radius: 30px;
+                margin-left: 10px;
+            }
+
+        .product-container {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 25px;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 1800px;
+            margin: 20px auto;
+        }
+
+        .product-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            max-width: 100px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="product-container">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <h1 class="product-title">@ViewData["Title"]</h1>
+            </div>
+            <div class="col-4 text-right">
+                <a class="btn btn-info" href="javascript:window.history.back();">
+                    <i class="fa-solid fa-arrow-left" style="color: #996A97;"></i> Voltar
+                </a>
+            </div>
+        </div>
+        <hr />
+        <div class="container-with-border">
+            <div class="row">
+                <div class="col-5">
+                    <div class="col-md-4 image-container d-flex align-items-center">
+                        <img src="data:@Model.Imagem" alt="@Model.Imagem" style="width: 300px; height: 300px" />
+                    </div>
+                </div>
+                <div class="col-7">
+                    <div class="row">
+                        <div class="center col-5">
+                            <span class="rating">
+                                <svg width="35" height="35" class="text-primary">
+                                    <use xlink:href="#star-solid"></use>
+                                </svg>4.5
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="center col-1">
+                            <i class="fas fa-store" style="color: #996A97;"></i>
+                        </div>
+                        <div class="col-10">
+                            @Html.DisplayFor(model => model.Estabelecimento)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="center col-4">
+                            <span class="money-format" style="font-size: 24px;">
+                                <i class="fa fa-dollar"></i>@Model.Valor.ToString("C")
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="center col-2">
+                            <strong>Descrição:</strong>
+                        </div>
+                        <div class="col-10">
+                            <div class="description-box" style="border-radius: 10px; border: 1px solid #ccc; padding: 10px;">
+                                <textarea rows="5" cols="50" style="resize: vertical; max-width: 100%; max-height: 100%; border: none; width: 100%; height: 100%;"
+                                          readonly>@Model.Descricao</textarea>
+                            </div>
+                        </div>
+
+                    </div>                    <div class="row">
+                        <div class="center col-12">
+                            <span class="money-format" style="font-size: 24px;">
+                                Tags:
+                                @foreach (var hashtag in Model.Hashtags)
+                                {
+                                    <span>@hashtag.Tag</span>
+                                    @if (hashtag != Model.Hashtags.Last())
+                                    { // Evita a vírgula após o último item
+                                        <span>, </span>
+                                    }
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <hr />
+
+
+                    <div>
+                        <form asp-action="Delete">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Excluir" class="btn btn-danger" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

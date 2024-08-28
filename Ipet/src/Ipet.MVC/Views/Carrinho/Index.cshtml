@@ -1,0 +1,181 @@
+﻿@model Ipet.ViewModels.CarrinhoViewModel
+
+@using Ipet.MVC.Extensions
+
+@{
+    ViewData["Title"] = "Carrinho";
+}
+@if (Model.Comfirma == false)
+{
+    <h1 class="text-center">Meu Carrinho</h1>
+}
+else
+{
+    <h1 class="text-center">Deseja confirmar seu carrinho de Compras?</h1>
+}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title">Itens no Carrinho de @User.Identity.Name</p>
+
+                    @if(Model.Comfirma == false){
+                    <ul class="list-group">
+                        @{
+                            decimal total = 0.0m;
+                            if (Model != null && Model.CarrinhoProdutos != null)
+                            {
+                                foreach (var carrinhoProduto in Model.CarrinhoProdutos)
+                                {
+                                    <li class="list-group-item" style="margin: 20px 0">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h5 class="mb-0">@carrinhoProduto.Produto.Nome</h5>
+                                                <p class="mb-1">@carrinhoProduto.Produto.Estabelecimento</p>
+                                                <p class="mb-1">Quantidade: @carrinhoProduto.Quantidade</p>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="btn-group" role="group">
+                                                    <!-- Botão para diminuir quantidade -->
+                                                    <form asp-controller="Carrinho" asp-action="AtualizarQuantidadeProduto" method="post">
+                                                        <input type="hidden" name="produtoId" value="@carrinhoProduto.Produto.Id" />
+                                                        <input type="hidden" name="quantidade" value="@Math.Max(carrinhoProduto.Quantidade - 1, 1)" />
+                                                        <button type="submit" class="btn btn-sm"><i class="fas fa-minus"></i></button>
+                                                    </form>
+                                                    <!-- Botão para aumentar quantidade -->
+                                                    <form asp-controller="Carrinho" asp-action="AtualizarQuantidadeProduto" method="post">
+                                                        <input type="hidden" name="produtoId" value="@carrinhoProduto.Produto.Id" />
+                                                        <input type="hidden" name="quantidade" value="@Math.Min(carrinhoProduto.Quantidade + 1, 999)" />
+                                                        <button type="submit" class="btn btn-sm"><i class="fas fa-plus"></i></button>
+                                                    </form>
+                                                    <!-- Botão para remover produto -->
+                                                    <form asp-controller="Carrinho" asp-action="RemoverProduto" method="post">
+                                                        <input type="hidden" name="produtoId" value="@carrinhoProduto.Produto.Id" />
+                                                        <button type="submit" class="btn btn-sm"><i class="fas fa-trash-alt" style="color: red !important"></i></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 text-right">
+                                                <p class="mb-0">@carrinhoProduto.Produto.Valor.ToString("C")</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    // Calcular subtotal
+                                    decimal subtotal = carrinhoProduto.Quantidade * carrinhoProduto.Produto.Valor;
+                                    total += subtotal;
+                                }
+                            }
+                        }
+                        <!-- Total do Carrinho -->
+                        <li class="list-group-item bg-light">
+                            <div class="row">
+                                <div class="col-md-8">
+                                        <h5 class="mb-0" style="font-size: 17px;">Total</h5>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <strong>@total.ToString("C")</strong>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="text-center mt-3">
+                        <form asp-controller="Carrinho" asp-action="CompraCarrinho" method="get">
+                                <button type="submit" class="btn" style="background-color: #986a97 !important; border: none;color: white;">
+                                    Realizar Compra
+                                </button>
+                        </form>
+                    </div>
+                    }
+                    else
+                    {
+                        <ul class="list-group">
+                            @{
+                                decimal total = 0.0m;
+                                if (Model != null && Model.CarrinhoProdutos != null)
+                                {
+                                    foreach (var carrinhoProduto in Model.CarrinhoProdutos)
+                                    {
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h5 class="mb-0">@carrinhoProduto.Produto.Nome</h5>
+                                                    <p class="mb-1">@carrinhoProduto.Produto.Estabelecimento</p>
+                                                    <p class="mb-1">Quantidade: @carrinhoProduto.Quantidade</p>
+                                                </div>                                               
+                                                <div class="col-md-2 text-right">
+                                                    <p class="mb-0">@carrinhoProduto.Produto.Valor.ToString("C")</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        // Calcular subtotal
+                                        decimal subtotal = carrinhoProduto.Quantidade * carrinhoProduto.Produto.Valor;
+                                        total += subtotal;
+                                    }
+                                }
+                            }
+                            <!-- Total do Carrinho -->
+                            <li class="list-group-item bg-light">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h5 class="mb-0">Total</h5>
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <strong>@total.ToString("C")</strong>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="text-center mt-3">
+                            <form asp-controller="Carrinho" asp-action="RealizarCompra" method="get">
+                                <button type="submit" class="btn" style="background-color: #986a97 !important; color: white;border: none !important;">Finalizar Compra</button>
+                            </form>
+                        </div>
+                        <div class="text-center mt-3">
+                            <form asp-controller="Carrinho" asp-action="CancelaCarrinho" method="get">
+                                <button type="submit" class="btn" style="background-color: #986a97 !important; color: white;border: none !important;">Voltar</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="TituloModalCentralizado">Erro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    var errorMessage = TempData["ErrorMessage"] as string;
+    if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <script>
+            $(document).ready(function () {
+                $('#errorMessage').text('@errorMessage');
+                $('#errorModal').modal();
+            });
+        </script>
+    }
+}
+
+
+
+

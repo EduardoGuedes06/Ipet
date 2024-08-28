@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Ipet.ViewModels.FavoritoViewModel>
+
+@{
+    ViewData["Title"] = "Favorito";
+}
+
+<h1 class="text-center">Meus Favoritos</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <p>Navegue ou faça alguma exclusão entre os seus itens favoritados.</p>
+                    <ul class="list-group">
+                        @{
+  
+                            if (Model != null && Model != null)
+                            {
+                                foreach (var produto in Model)
+                                {
+                                    <li class="list-group-item" style="padding-bottom: 0;">
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                <h5 class="mb-0">
+                                                    <a href="@Url.Action("Details", "Produtos", new { id = produto.ProdutoId })" style="font-size:16px;color: black;text-decoration: none;font-weight: 400;">@produto.Produto.Nome</a>
+                                                </h5>
+
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="btn-group" role="group">                                                  
+                                                    <form asp-controller="Favorito" asp-action="RemoverProduto" method="post">
+                                                        <input type="hidden" name="produtoId" value="@produto.Produto.Id" />
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger" style="border:none"><i class="fas fa-trash-alt"></i></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        }
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

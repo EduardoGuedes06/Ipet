@@ -1,0 +1,180 @@
+﻿@using Ipet.MVC.Extensions
+@using System.Security.Claims;
+@model IEnumerable<Ipet.ViewModels.ProdutoViewModel>
+
+<link href="~/css/produtos_2.css" rel="stylesheet" />
+<link href="~/css/vendor.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<div class="preloader-wrapper">
+    <div class="preloader">
+    </div>
+</div>
+<style>
+    .tab-image {
+        width: 100px;
+        height: auto;
+    }
+
+    .itemsFilter {
+        padding: 15px 30px !important;
+        border: none !important;
+        border-radius: 15px !important;
+        background-color: #f8f9fa !important;
+    }
+
+
+
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnCarrinho = document.getElementById("btnCarrinho");
+        btnCarrinho.addEventListener("click", function () {
+            fetch('/Produtos/Carrinho', {
+                method: 'POST',
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        console.log('Ação de carrinho bem-sucedida.');
+                    } else {
+                        console.error('Falha na ação de carrinho.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro na ação de carrinho: ' + error);
+                });
+        });
+    });
+
+</script>
+
+
+        <div class="row">
+            <form method="get" action="/lista-de-produtos" style="display: inline-block;">
+
+                @if (!string.IsNullOrEmpty(ViewBag.NomePet))
+                {
+                    <div style="display: flex; align-items: center;">
+                        <div class="pet-info" style="display: inline-block;">
+                        <label for="NomePet" style="margin-bottom: 15px;margin-right: 15px;">@ViewBag.NomePet :</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoAnimal"></label>
+                            <input type="checkbox" name="tipoAnimal" /> @ViewBag.TipoAnimal
+                        </div>
+                        <div class="form-group">
+                            <label for="raca"></label>
+                            <input type="checkbox" name="raca" /> @ViewBag.Raca
+                        </div>
+                        <div class="form-group">
+                            <label for="porte"></label>
+                            <input type="checkbox" name="porte" /> @ViewBag.Porte
+                        </div>
+                    </div>
+
+                }
+
+
+            <input type="text" name="tags" placeholder="Insira as tags separadas por vírgulas" class="itemsFilter" />
+            <button type="submit" style="background-color: #986a97 !important;color: white;padding: 12px;border-radius: 15px;border:none">
+                <i class="fas fa-search"></i>
+            </button>
+
+            </form>
+        </div>
+
+
+
+
+<section class="py-5">
+    <div class="container-flui">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="bootstrap-tabs product-tabs">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+                            <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                                @foreach (var item in Model)
+                                 {
+
+                                    @if (User.Identity.IsAuthenticated && User.HasClaim("Usuario", "2"))
+                                    {
+                                        if (Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) != item.EstabelecimentoId)
+                                        {
+                                            continue;
+                                        }
+                                    }
+
+                                    <div class="col-3">
+
+                                        <div class="product-item">
+                                            @if (User.Identity.IsAuthenticated && User.HasClaim("Usuario", "1"))
+                                            {
+
+                                                <a href="@Url.Action("Favorito", "Produtos", new { produtoId = item.Id })" class="btn-wishlist" style="color: #b95fc8 !important;">
+                                                    <svg width="24" height="24">
+                                                        <use xlink:href="#heart"></use>
+                                                    </svg>
+                                                </a>
+                                            }
+                                            <figure>
+                                                <a href="@Url.Action("Details", "Produtos", new { id = item.Id })" title="Product Title">
+                                                    <img src="data:@item.Imagem" class="tab-image" style="width: 150px; height: 150px;">
+                                                </a>
+                                            </figure>
+                                            @{
+                                                string nome = item.Nome;
+                                                if (nome.Length > 20)
+                                                {
+                                                    nome = nome.Substring(0, 17) + "...";
+                                                }
+                                            }
+
+                                            <h3 style="padding-bottom: 10px !important;">@nome</h3>
+
+                                            <span class="qty">@Html.DisplayFor(modelItem => item.Estabelecimento)</span>
+                                            <span class="rating"><svg width="24" height="24" class="text-primary">
+                                                <use xlink:href="#star-solid"></use></svg>@item.MediaAva</span>
+                                            <span class="price" style="padding: 10px 0 20px 0;">$@Html.DisplayFor(modelItem => item.Valor)</span>
+                                            @if (User.Identity.IsAuthenticated && User.HasClaim("Usuario", "2"))
+                                            {
+                                                if (Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) == item.EstabelecimentoId)
+                                                {
+                                                    <a supress-by-claim-name="Produto" supress-by-claim-value="Editar" class="btn btn-info" asp-controller="Produtos" asp-action="Edit" asp-route-id="@item.Id"><spam class="fa fa-pencil-alt"></spam> </a>
+                                                }
+
+
+                                            }
+
+                                        </div>
+
+                                    </div>
+                                 }
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var styleSheets = document.styleSheets;
+        for (var i = 0; i < styleSheets.length; i++) {
+            var rules = styleSheets[i].cssRules;
+            if (rules) {
+                for (var j = 0; j < rules.length; j++) {
+                    var rule = rules[j];
+                    if (rule.selectorText === '.container-fluid' && rule.style.maxWidth === '1600px') {
+                        styleSheets[i].deleteRule(j);
+                        console.log('Regra .container-fluid removida.');
+                    }
+                }
+            }
+        }
+    });
+</script>

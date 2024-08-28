@@ -1,0 +1,108 @@
+﻿@model Ipet.ViewModels.CarrinhoViewModel
+
+@using Ipet.MVC.Extensions
+
+@{
+    ViewData["Title"] = "Compra";
+}
+
+<h1 class="text-center">Resumo Carrinho</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Itens no Carrinho</h4>
+                    <ul class="list-group">
+                        @{
+                            decimal total = 0.0m;
+                            int totalItens = 0;
+                            if (Model != null && Model.CarrinhoProdutos != null)
+                            {
+                                foreach (var carrinhoProduto in Model.CarrinhoProdutos)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h5 class="mb-0">@carrinhoProduto.Produto.Nome</h5>
+                                                <p class="mb-1">@carrinhoProduto.Produto.Estabelecimento</p>
+                                                <p class="mb-1">Quantidade: @carrinhoProduto.Quantidade</p>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <p class="mb-0">@carrinhoProduto.Produto.Valor.ToString("C")</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    // Calcular subtotal
+                                    decimal subtotal = carrinhoProduto.Quantidade * carrinhoProduto.Produto.Valor;
+                                    total += subtotal;
+                                    totalItens += carrinhoProduto.Quantidade;
+                                }
+                            }
+                        }
+                        <!-- Total do Carrinho -->
+                        <li class="list-group-item bg-light">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="mb-0">Total de Itens: @totalItens</h5>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <strong>Total: @total.ToString("C")</strong>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="text-center mt-3">
+                        <!-- Botão de Confirmar -->
+                        <form asp-controller="Carrinho" asp-action="RealizarCompra" method="post">
+                            <input type="hidden" name="totalItens" value="@totalItens" />
+                            <input type="hidden" name="totalValor" value="@total" />
+                            <input type="hidden" name="endereco" value="Endereço fictício" />
+                            <button type="submit" class="btn btn-primary btn-lg">Confirmar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="errorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Erro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        function showErrorModal(message) {
+            $('#errorMessage').text(message);
+            $('#errorModal').modal('show');
+        }
+
+        // Adicione isso para processar a resposta JSON da Controller
+        $(document).ajaxError(function (event, xhr, settings, thrownError) {
+            var response = JSON.parse(xhr.responseText);
+            if (!response.success) {
+                showErrorModal(response.message);
+            }
+        });
+    });
+</script>
+

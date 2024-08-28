@@ -1,0 +1,139 @@
+﻿@model Ipet.ViewModels.CompraViewModel
+
+@{
+    ViewData["Title"] = "Detalhes da Compra";
+}
+
+<style>
+
+    .container_1 {
+        max-width: 1000px; /* Ajuste o valor conforme necessário */
+        margin: 50px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .list-group-item {
+        border:none
+    }
+
+    .qrcode {
+        text-align: center;
+    }
+
+        .qrcode img {
+            min-width: 90px;
+            min-height: 90px;
+            width: auto;
+            height: auto;
+        }
+</style>
+<h1 class="text-center mb-4">Finalizar Compra</h1>
+
+<div class="container_1" style=" background-color: #fff; border: 1px solid #ccc;
+     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+     padding: 20px;
+     border-radius: 25px;
+     margin-top: 20px;
+     width: 90%;
+     max-width: 1800px;
+     margin: 20px auto;margin-bottom: 100px;">
+
+    <div class="row d-flex align-items-center">
+        <div class="col-md-6">
+            <div class="card" style="border:none">
+                <ul class="list-group" style="border:none">
+                    @{
+                        if (Model != null)
+                        {
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>@Model.DataCadastro</strong>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <strong>@Model.Valor.ToString("C")</strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if (!string.IsNullOrEmpty(Model.ListaProdutos))
+                                        {
+                                            var linhas = Model.ListaProdutos.Split(';');
+                                            foreach (var linha in linhas)
+                                            {
+                                                // Divida a linha pelo delimitador ':'
+                                                var partes = linha.Split(':');
+                                                // Verifique se há pelo menos duas partes (ID e descrição)
+                                                if (partes.Length >= 2)
+                                                {
+                                                    // Exiba apenas a segunda parte (a descrição do produto)
+                                                    <p>@partes[1]</p>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 offset-md-3">
+                                        @if (Model.Pagou == false)
+                                        {
+                                            <div class="text-center">
+                                                <a href="@Url.Action("HistoricoCompra", "Compra")">
+                                                    <button class="btn" style="background-color: #986a97 !important; color: white;border: none !important;margin-top:20px">Historico</button>
+                                                </a>
+                                            </div>
+                                            <div class="text-center">
+                                                <a href="@Url.Action("pagar", "Compra")">
+                                                    <button class="btn" style="background-color: #986a97 !important; color: white;border: none !important;margin-top:100px">Confirmar Pagamento</button>
+                                                </a>
+                                                <a href="@Url.Action("Cancelar", "Compra")">
+                                                    <button class="btn" style="background-color: #986a97 !important; color: white;border: none !important;margin-top:20px">Cancelar Pagamento</button>
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-center">
+                                                <a href="@Url.Action("pagou", "Compra")">
+                                                    <button class="btn" style="background-color: #986a97 !important; color: white;border: none !important;margin-top:100px">Confirmar e Visualizar</button>
+                                                </a>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+
+                            </li>
+                            
+
+                            
+                            
+
+
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="qrcode">
+                <p class="mb-3">QR Code da Compra</p>
+                @if (Model.Pagou == false)
+                {
+                     <img src="~/imagens/logos/QrCode.png" alt="logo" class="img-fluid qr-code">
+                }
+                else
+                {
+                    <img src="~/imagens/logos/PagamentoAprovado.png" alt="logo" class="img-fluid">
+                }
+            </div>
+        </div>
+    </div>
+</div>

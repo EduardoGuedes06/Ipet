@@ -1,0 +1,33 @@
+﻿@using Ipet.MVC.Extensions
+@model IEnumerable<Ipet.ViewModels.ServicoViewModel>
+
+@{
+    ViewData["Title"] = "Servicos";
+}
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="bootstrap-tabs product-tabs">
+            <div class="col">
+                <h1 class="mt-5">@ViewData["Title"]</h1>
+            </div>
+            <div class="col text-right">
+                @if (User.Identity.IsAuthenticated && User.HasClaim("Usuario", "2"))
+                {
+                    <div class="mb-3">
+                        <a class="btn" asp-action="Create" style="color: rgb(153,106,151);">
+                            <i class="fas fa-plus"></i> <span style="color: rgb(153,106,151);">Novo Serviço</span>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="row">
+        <div class="col">
+            <partial name="_ListaServicos" />
+        </div>
+    </div>
+</div>

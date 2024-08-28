@@ -1,0 +1,47 @@
+@using Ipet.MVC.Models;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item d-flex">
+            <div class="col">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                    @(
+                        User.Identity.Name.Length > 15
+                        ? User.Identity.Name.Substring(0, 15) + "..."
+                        : User.Identity.Name
+                        )
+                </a>
+            </div>
+            <div class="col">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-dark" style="background: none; border: none; padding: 0;">
+                        <img src="~/imagens/Icons/sair.png" alt="Ícone de Logout" style="width: 24px; height: 24px;" />
+                    </button>
+                </form>
+            </div>
+
+
+        </li>
+
+
+
+
+    }
+    else
+    {
+            <li class="nav-item">
+
+                <a  asp-area="Identity" asp-page="/Account/Login">
+
+                    <svg width="24" height="24" viewBox="0 0 24 24"><use xlink:href="#user"></use></svg>
+                                        
+                </a>
+
+            </li>
+
+    }
+</ul>

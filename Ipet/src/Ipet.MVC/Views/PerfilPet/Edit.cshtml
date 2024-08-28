@@ -1,0 +1,596 @@
+﻿@model Ipet.ViewModels.PerfilPetViewModel
+
+@{
+    ViewData["Title"] = Model.Nome;
+}
+<style>
+    .image-container {
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    body2 {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #c4c0c0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .image-container img {
+        width: 300px;
+        height: 300px;
+        border-radius: 30px;
+        margin-left: 10px;
+    }
+
+    .product-container {
+        background-color: #D1B2FF; /* Cor de fundo roxo claro */
+        border: 2px solid #8e9599; /* Aumenta a borda dos campos */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 25px;
+        margin-top: 20px;
+        width: 90%;
+        max-width: 1800px;
+        margin: 20px auto;
+        background-image: url('@Url.Content("~/imagens/Wallpapper/Fundo.png")');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .form-group input[type="text"],
+    .form-group select {
+        border: 2px solid #8e9599;
+    }
+
+    .form-check-input {
+        border: 2px solid #8e9599;
+    }
+
+    .form-group input[type="number"] {
+        border: 2px solid #8e9599;
+    }
+
+    .form-group input[type="checkbox"] {
+        border: 2px solid #8e9599;
+    }
+
+    .product-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 2.5rem;
+        color: #333;
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .logo {
+        max-width: 100px;
+        border-radius: 20px;
+    }
+</style>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="~/css/vendor.css">
+    <link rel="stylesheet" href="~/css/dog.css" />
+    @* <link rel="stylesheet" type="text/css" href="~/css/style.css"> *@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .image-container {
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        }
+
+            .image-container img {
+                width: 300px;
+                height: 300px;
+                border-radius: 30px;
+                margin-left: 10px;
+            }
+
+        .product-container {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 25px;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 1800px;
+            margin: 20px auto;
+        }
+
+        .product-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            max-width: 100px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<script>
+    var racasPorTipo = {
+        "Cão": [
+            "Sem raça",
+            "Akita",
+            "Basset hound",
+            "Beagle",
+            "Bichon frisé",
+            "Boiadeiro australiano",
+            "Border collie",
+            "Boston terrier",
+            "Boxer",
+            "Buldogue francês",
+            "Buldogue inglês",
+            "Bull terrier",
+            "Cane corso",
+            "Cavalier king charles spaniel",
+            "Chihuahua",
+            "Chow chow",
+            "Cocker spaniel inglês",
+            "Dachshund",
+            "Dálmata",
+            "Doberman",
+            "Dogo argentino",
+            "Dogue alemão",
+            "Fila brasileiro",
+            "Golden retriever",
+            "Husky siberiano",
+            "Jack russell terrier",
+            "Labrador retriever",
+            "Lhasa apso",
+            "Lulu da pomerânia",
+            "Maltês",
+            "Mastiff inglês",
+            "Mastim tibetano",
+            "Pastor alemão",
+            "Pastor australiano",
+            "Pastor de Shetland",
+            "Pequinês",
+            "Pinscher",
+            "Pit bull",
+            "Poodle",
+            "Pug",
+            "Rottweiler",
+            "Schnauzer",
+            "Shar-pei",
+            "Shiba",
+            "Shih tzu",
+            "Staffordshire bull terrier",
+            "Weimaraner",
+            "Yorkshire"
+        ],
+        "Gato": [
+            "Sem Raça",
+            "Siamês",
+            "Maine Coon",
+            "Persa",
+            "Sphynx",
+            "Ragdoll",
+            "Bengal",
+            "British Shorthair",
+            "Abissínio",
+            "Birmanês",
+            "Scottish Fold",
+            "Siberiano",
+            "Tonquinês",
+            "Cornish Rex",
+            "Devon Rex",
+            "Siamesa",
+            "Oriental Shorthair",
+            "Himalaia",
+            "Exótico",
+            "Manx",
+            "Bombaim",
+            "Chartreux",
+            "Somali",
+            "Turkish Van",
+            "LaPerm",
+            "Nebelung"
+        ],
+        "Familia Mustelidae": [
+            "Doninha",
+            "Furão",
+            "Texugo",
+            "Vison",
+            "Lontra",
+            "Ariranha",
+            "Fuinha",
+            "Grison",
+            "Irara",
+            "Arminho",
+            "Lontra de Pescoço Manchado"],
+        "Roedor": [
+            "Rato Doméstico",
+            "Dumbo Rat",
+            "Rato Rex",
+            "Rato Siamês",
+            "Rato Hairless",
+            "Hamster Sírio (Hamster Dourado)",
+            "Hamster Anão Russo",
+            "Hamster Roborovski",
+            "Hamster Chinês",
+            "Gerbo",
+            "Porquinho-da-índia",
+            "Rato de Estimação",
+            "Chinchila",
+            "Esquilo da Mongólia (Gerbil da Mongólia)",
+            "Degu"],
+        "Lebre": [
+            "Lebre Europeia",
+            "Lebre-de-patas-brancas",
+            "Lebre-saltadora-africana"
+        ],
+        "Ave": [
+            "Canário",
+            "Papagaio",
+            "Periquito",
+            "Cacatua",
+            "Pomba",
+            "Falcão",
+            "Coruja",
+            "Avestruz",
+            "Águia",
+            "Flamingo",
+            "Tucano",
+            "Pardal",
+            "Gavião",
+            "Andorinha",
+            "Galinha",
+            "Pato",
+            "Pombo",
+            "Canário Belga",
+            "Arara",
+            "Gavião-real"
+        ],
+        "Inseto": [
+            "Formiga",
+            "Abelha",
+            "Borboleta",
+            "Joaninha",
+            "Mosca",
+            "Libélula",
+            "Gafanhoto",
+            "Barata",
+            "Besouro",
+            "Vespa",
+            "Mosquito",
+            "Louva-a-deus"
+        ],
+        "Aracnídeo": [
+            "Aranha",
+            "Escorpião",
+            "Ácaro",
+            "Opilião",
+            "Carrapato",
+            "Ácaro de Poeira",
+            "Aranha-caranguejeira",
+            "Viúva-negra",
+            "Aranha de Jardim",
+            "Solifugo",
+            "Escorpião-piolho",
+            "Ácaro-aranha",
+            "Ácaro-vermelho",
+            "Tarântula",
+            "Ácaro de Sarna",
+            "Ácaro Varroa"
+        ],
+        "Anfíbio": [
+            "Sapo",
+            "Rã",
+            "Salamandra",
+            "Tartaruga",
+            "Cobra",
+            "Lagarto",
+            "Jacaré",
+            "Iguana",
+            "Crocodilo",
+            "Dragão-de-Komodo",
+            "Tartaruga-Marinha",
+            "Camaleão",
+            "Gecko",
+            "Cágado",
+            "Agama",
+            "Anolis"
+        ],
+        "Equino": [
+            "Cavalo Árabe",
+            "Pônei Shetland",
+            "Cavalo Puro-Sangue Inglês",
+            "Cavalo Crioulo",
+            "Cavalo Quarto de Milha",
+            "Cavalo Appaloosa",
+            "Cavalo Mangalarga Marchador",
+            "Cavalo Lipizzaner",
+            "Cavalo Clydesdale",
+            "Cavalo Tennessee Walker",
+            "Cavalo Paint Horse",
+            "Cavalo Fjord",
+            "Cavalo Holsteiner",
+            "Cavalo Frísio",
+            "Cavalo Percheron",
+            "Cavalo Andaluz",
+            "Cavalo Lusitano"
+        ],
+        "Bovino": [
+            "Gado Angus",
+            "Gado Hereford",
+            "Gado Charolês",
+            "Gado Holandês",
+            "Gado Simmental",
+            "Gado Limousin",
+            "Gado Brahman",
+            "Gado Red Angus",
+            "Gado Jersey",
+            "Gado Galloway",
+            "Gado Gelbvieh",
+            "Gado Highland",
+            "Gado Normando",
+            "Gado Wagyu",
+            "Gado Chianina",
+            "Gado Santa Gertrudis",
+            "Gado Ayrshire",
+            "Gado Brown Swiss",
+            "Gado Belted Galloway"
+        ]
+    };
+    $(document).ready(function () {
+        var tipoAnimalDropdown = $('#TipoAnimal');
+        var racaDropdown = $('#Raca');
+
+        tipoAnimalDropdown.on('change', function () {
+            var selectedTipo = $(this).val();
+            racaDropdown.empty();
+            if (selectedTipo) {
+                var racas = racasPorTipo[selectedTipo];
+                if (racas) {
+                    $.each(racas, function (index, value) {
+                        racaDropdown.append($('<option>').text(value).val(value));
+                    });
+                } else {
+                    racaDropdown.append($('<option>').text('Selecione um tipo de animal disponivel'));
+                }
+                racaDropdown.prop('disabled', false);
+            } else {
+                racaDropdown.append($('<option>').text('Selecione o tipo de animal primeiro'));
+                racaDropdown.prop('disabled', true);
+            }
+        });
+    });
+</script>
+
+<div class="product-container">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+        </div>
+        <div class="col-4 text-right">
+            <a class="btn btn-info" href="javascript:window.history.back();" style="background-color: #986a97 !important; color: white;border: none !important;">
+                <i class="fas fa-arrow-left" style="color: white;"></i> Voltar
+            </a>
+        </div>
+
+    </div>
+    <h2>Atualizar perfil do Pet: @ViewData["Title"]</h2>
+    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="TipoAnimal" class="control-label">Tipo de Animal</label>
+                    <select asp-for="TipoAnimal" class="form-control" id="TipoAnimal">
+                        <option value="Cão">Cão</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Roedor">Roedor</option>
+                        <option value="Roedor">Lebre</option>
+                        <option value="Roedor">Familia Mustelidae</option>
+                        <option value="Ave">Ave</option>
+                        <option value="Inseto">Inseto</option>
+                        <option value="Aracnídeo">Aracnídeo</option>
+                        <option value="Anfíbio">Anfíbio</option>
+                        <option value="Equino">Equino</option>
+                        <option value="Bovino">Bovino</option>
+                    </select>
+                    <span asp-validation-for="TipoAnimal" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Nome" class="control-label"></label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Raca" class="control-label">Raça</label>
+                    <select asp-for="Raca" class="form-control" id="Raca" disabled>
+                        <option value="">Selecione o tipo de animal primeiro</option>
+                    </select>
+                    <span asp-validation-for="Raca" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Idade" class="control-label"></label>
+                    <input asp-for="Idade" class="form-control" />
+                    <span asp-validation-for="Idade" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Porte" class="control-label">Porte</label>
+                    <select asp-for="Porte" class="form-control" id="Porte">
+                        <option value="Pequeno">Pequeno</option>
+                        <option value="Médio">Médio</option>
+                        <option value="Grande">Grande</option>
+                    </select>
+                    <span asp-validation-for="Porte" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Observacao" class="control-label"></label>
+                    <input asp-for="Observacao" class="form-control" />
+                    <span asp-validation-for="Observacao" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5" style="padding-left: 40x">
+                <div class="form-group">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="col-6">
+                <div class="mb-3 col-md-3" style="position: relative; top: 80px;">
+                    <div class="dog">
+                        <div class="heart heart--1"></div>
+                        <div class="heart heart--2"></div>
+                        <div class="heart heart--3"></div>
+                        <div class="heart heart--4"></div>
+                        <div class="head">
+                            <div class="year year--left"></div>
+                            <div class="year year--right"></div>
+                            <div class="nose"></div>
+                            <div class="face">
+                                <div class="eye eye--left"></div>
+                                <div class="eye eye--right"></div>
+                                <div class="mouth"></div>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div class="cheast"></div>
+                            <div class="back"></div>
+                            <div class="legs">
+                                <div class="legs__front legs__front--left"></div>
+                                <div class="legs__front legs__front--right"></div>
+                                <div class="legs__back legs__back--left"></div>
+                                <div class="legs__back legs__back--right"></div>
+                            </div>
+                            <div class="tail"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="mb-3 d-flex justify-content-center align-items-center" style="margin-top: 40px;">
+                <button type="submit" class="btn btn-primary" style="background-color: #986a97 !important; color: white;border: none !important;">
+                    <i class="fas fa-plus" style="color: white;"></i> Atualizar Perfil
+                </button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+
+
+
+@*<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form method="post" asp-action="Edit" enctype="multipart/form-data">
+                <input asp-for="Id" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Nome" class="control-label"></label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TipoAnimal" class="control-label"></label>
+                    <input asp-for="TipoAnimal" class="form-control" />
+                    <span asp-validation-for="TipoAnimal" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Raca" class="control-label"></label>
+                    <input asp-for="Raca" class="form-control" />
+                    <span asp-validation-for="Raca" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Idade" class="control-label"></label>
+                    <input asp-for="Idade" class="form-control" />
+                    <span asp-validation-for="Idade" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Porte" class="control-label"></label>
+                    <input asp-for="Porte" class="form-control" />
+                    <span asp-validation-for="Porte" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Observacao" class="control-label"></label>
+                    <textarea asp-for="Observacao" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Observacao" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Ativo" class="control-label"></label>
+                    <input asp-for="Ativo" class="form-check-input" />
+                    <span asp-validation-for="Ativo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>*@
